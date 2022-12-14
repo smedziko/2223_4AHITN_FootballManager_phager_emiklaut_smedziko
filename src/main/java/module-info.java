@@ -1,0 +1,8 @@
+module com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko {
+    requires javafx.controls;
+    requires javafx.fxml;
+
+
+    opens com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko to javafx.fxml;
+    exports com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko;
+}
