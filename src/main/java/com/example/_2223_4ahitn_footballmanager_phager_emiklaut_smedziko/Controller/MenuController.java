@@ -25,7 +25,7 @@ public class MenuController {
             public void handle(ActionEvent actionEvent) {
 
                 try {
-                    ChangeScene.change_scene("hello-view", start_game);
+                    ChangeScene.change_scene("spielfeld", start_game);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
