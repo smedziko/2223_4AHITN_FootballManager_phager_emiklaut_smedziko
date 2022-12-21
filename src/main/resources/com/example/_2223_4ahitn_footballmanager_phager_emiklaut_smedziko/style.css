@@ -1,0 +1,5 @@
+.menu{
+    -fx-background-image: url("startscreen.jpg");
+    -fx-background-size: 1200.0 800.0;
+    -fx-background-repeat: no-repeat;
+    }

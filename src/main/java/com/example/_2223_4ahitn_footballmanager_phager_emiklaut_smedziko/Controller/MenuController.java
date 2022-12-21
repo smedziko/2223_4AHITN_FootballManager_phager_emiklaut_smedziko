@@ -5,11 +5,15 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 
 public class MenuController {
 
+    @FXML
+    private Pane background;
     @FXML
     private Button start_game;
 
@@ -21,7 +25,7 @@ public class MenuController {
             public void handle(ActionEvent actionEvent) {
 
                 try {
-                    ChangeScene.change_scene("hello-view", start_game);
+                    ChangeScene.change_scene("spielfeld", start_game);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
