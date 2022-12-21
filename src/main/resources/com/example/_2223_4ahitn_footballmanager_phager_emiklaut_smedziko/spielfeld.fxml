@@ -17,8 +17,9 @@
       </StackPane>
       <Button layoutX="21.0" layoutY="173.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="180.0" text="Abseitsfalle" />
       <Button layoutX="21.0" layoutY="204.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="180.0" text="Team Pressing" />
-      <ListView layoutX="21.0" layoutY="243.0" prefHeight="380.0" prefWidth="180.0" />
+      <ListView layoutX="21.0" layoutY="243.0" prefHeight="360.0" prefWidth="180.0" />
       <Button layoutX="65.0" layoutY="118.0" mnemonicParsing="false" text="Taktik Switch" />
       <Label layoutX="94.0" layoutY="95.0" text="Label" />
+      <Button fx:id="start_play" layoutX="1112.0" layoutY="510.0" mnemonicParsing="false" onAction="#play_click" prefHeight="79.0" prefWidth="125.0" text="Play" />
    </children>
 </AnchorPane>

@@ -1,7 +1,9 @@
 package com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko;
 
 import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Model.Spieler;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -24,6 +26,10 @@ public class SpielfeldController {
     @FXML
     private AnchorPane playable_field;
 
+    @FXML
+    private Button start_play;
+
+
     public void initialize(){
         Image img = new Image(String.valueOf(SpielfeldController.class.getResource("field1.png")));
         Image spieler = new Image(String.valueOf(SpielfeldController.class.getResource("QAT_akramafif.png")));
@@ -31,6 +37,7 @@ public class SpielfeldController {
         field_image.setImage(img);
         field_image.setPreserveRatio(false);
 
+        //Mannschaft Klasse, durch Schleife werden beide in dieser Klasse initialisiert
         Spieler s = new Spieler(playable_field, "LV", false);
         Spieler s2 = new Spieler(playable_field, "LV", true);
 
@@ -55,5 +62,10 @@ public class SpielfeldController {
 
 
 
+    }
+
+    @FXML
+    void play_click(ActionEvent event) {
+        start_play.setVisible(false);
     }
 }
