@@ -5,49 +5,50 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 
-public class MenuController {
+public class SettingsController {
 
     @FXML
-    private Pane background;
-    @FXML
-    private Button start_game;
+    private ComboBox musikauswahl;
 
     @FXML
-    private Button settings;
+    private Slider lautstaerke;
 
-    public void initialize(){
+    @FXML
+    private RadioButton musikan;
+
+    @FXML
+    private RadioButton musikaus;
+
+    @FXML
+    private RadioButton soundan;
+
+    @FXML
+    private RadioButton soundaus;
+
+    @FXML
+    private Button save;
+
+    public void initialize() {
 
 
-        start_game.setOnAction(new EventHandler<ActionEvent>() {
+        save.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-
                 try {
-                    ChangeScene.change_scene("spielfeld", start_game);
+                    ChangeScene.change_scene("menu", save);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
-
-        settings.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    ChangeScene.change_scene("settings", settings);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-
-
 
     }
 }
