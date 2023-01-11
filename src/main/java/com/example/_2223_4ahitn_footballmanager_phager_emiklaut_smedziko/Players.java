@@ -36,7 +36,7 @@ public class Players {
         ObservableList<Players> list = FXCollections.observableArrayList();
         try {
             Statement s = c.createStatement();
-            ResultSet results = s.executeQuery("SELECT country_code FROM players");
+            ResultSet results = s.executeQuery("SELECT DISTINCT country_code FROM players");
             while (results.next()){
                 list.add(new Players(results));
             }
