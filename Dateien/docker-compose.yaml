@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  database:
+    container_name: database_football
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password --log_bin_trust_function_creators=1
+    environment:
+      MYSQL_ROOT_PASSWORD: football
+      MYSQL_DATABASE: football
+      MYSQL_USER: football
+      MYSQL_PASSWORD: football
+    ports:
+      - '4306:3306'
+    volumes:
+      - ./mysql:/var/lib/mysql
