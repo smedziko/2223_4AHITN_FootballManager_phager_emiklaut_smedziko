@@ -1,5 +1,6 @@
 package com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko;
 
+import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Controller.MenuController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
