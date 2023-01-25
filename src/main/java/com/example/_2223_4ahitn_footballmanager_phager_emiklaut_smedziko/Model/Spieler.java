@@ -1,6 +1,7 @@
 package com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Model;
 
-import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.SpielfeldController;
+import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Controller.SpielfeldController;
+import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.HelloApplication;
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -8,9 +9,6 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
-import java.util.Random;
-
-import static com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Model.Aufstellung.field_width;
 
 public class Spieler {
     AnchorPane spielfeld;
@@ -28,6 +26,8 @@ public class Spieler {
     boolean hasBall = false;
 
     boolean balldetected = false;
+    boolean onlymove = true;
+    boolean enemydetected = false;
 
     static ArrayList<Spieler> team = new ArrayList<>();
     static ArrayList<Spieler> enemyteam = new ArrayList<>();
@@ -41,6 +41,11 @@ public class Spieler {
 
     int zweikampf;
 
+    double underX;
+    double overY;
+    double overX;
+    double underY;
+
     AnimationTimer move = new AnimationTimer() {
         private long lastUpdate = 0;
 
@@ -51,6 +56,15 @@ public class Spieler {
 
                 try {
                     checkballdetection();
+
+                    if(!balldetected) {
+                        checkenemydetection();
+                    }
+                    if(onlymove) {
+                        checkdirection();
+                    }
+
+                    onlymove = true;
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -66,20 +80,61 @@ public class Spieler {
         }
     };
 
+    private void checkdirection() {
+        if(ball.getLayoutX() > 400 && body.getLayoutX() < overX && body.getLayoutX() > 836){
+            body.setLayoutX(body.getLayoutX() - speed);
+        }else if(body.getLayoutX() < underX){
+            body.setLayoutX(body.getLayoutX() - speed);
+        }
+    }
+
+    private void checkenemydetection() {
+
+        ArrayList<Spieler> teamlist;
+        if(isEnemy){
+            teamlist = team;
+        }else {
+            teamlist = enemyteam;
+        }
+
+        for(Spieler s : teamlist) {
+            if (s.body.getLayoutY() >= overY && s.body.getLayoutX() >= underX && s.body.getLayoutX() <= overX) {
+                enemydetected = true;
+                onlymove = false;
+            } else if (s.body.getLayoutY() <= underY && s.body.getLayoutY() >= body.getLayoutY() && s.body.getLayoutX() >= underX && s.body.getLayoutX() <= overX) {
+                enemydetected = true;
+                onlymove = false;
+            }
+
+            if (enemydetected) {
+                if (s.body.getLayoutY() > body.getLayoutY()) {
+                    body.setLayoutY(body.getLayoutY() + speed);
+                } else if (s.body.getLayoutY() < body.getLayoutY()) {
+                    body.setLayoutY(body.getLayoutY() - speed);
+                }
+
+                if (s.body.getLayoutX() > body.getLayoutX()) {
+                    body.setLayoutX(body.getLayoutX() + speed);
+                } else if (s.body.getLayoutX() < body.getLayoutX()) {
+                    body.setLayoutX(body.getLayoutX() - speed);
+                }
+            }
+
+        }
+
+    }
+
 
     // && ball.getLayoutY() < body.getLayoutY() + 2 && ball.getLayoutY() > body.getLayoutY() - 2
 
     public void checkballdetection() throws InterruptedException {
 
-        double underX = body.getLayoutX() - 107;
-        double overY = body.getLayoutY() - 107;
-        double overX = body.getLayoutX() + 107;
-        double underY = body.getLayoutY() + 107;
-
         if (ball.getLayoutY() >= overY && ball.getLayoutX() >= underX && ball.getLayoutX() <= overX) {
             balldetected = true;
+            onlymove = false;
         } else if (ball.getLayoutY() <= underY && ball.getLayoutY() >= body.getLayoutY() && ball.getLayoutX() >= underX && ball.getLayoutX() <= overX) {
             balldetected = true;
+            onlymove = false;
         }
 
         if(balldetected){
@@ -105,13 +160,13 @@ public class Spieler {
                 if (isEnemy) {
                     enemyTeamball = true;
                     System.out.println("Enemy Team Ball");
-                    fight();
+                    //fight();
                 } else {
                     teamball = true;
                     System.out.println("Team ball");
                 }
             }else {
-                fight();
+                //fight();
             }
         }
 
@@ -151,7 +206,7 @@ public class Spieler {
         this.spielfeld = spielfeld;
         Aufstellung.setPosition(this);
 
-        Image img = new Image(String.valueOf(SpielfeldController.class.getResource("QAT_akramafif.png")));
+        Image img = new Image(String.valueOf(HelloApplication.class.getResource("QAT_akramafif.png")));
         body.setFill(new ImagePattern(img));
 
 
@@ -160,6 +215,11 @@ public class Spieler {
 
         startX = body.getLayoutX();
         startY = body.getLayoutX();
+
+        underY = startY - 107;
+        overY = startY + 107;
+        overX = startX + 107;
+        underX = startX - 107;
 
     }
 

@@ -1,5 +1,7 @@
 package com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Model;
 
+import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Controller.MenuController;
+import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Controller.SpielfeldController;
 import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.HelloApplication;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -17,7 +19,8 @@ public class ChangeScene {
         Stage stageclose = (Stage) button.getScene().getWindow();
         stageclose.close();
         final FXMLLoader fxmlLoader = new FXMLLoader();
-        URL u = HelloApplication.class.getResource(game + ".fxml");
+        System.out.println(MenuController.class.getResource(game+".fxml"));
+        URL u = HelloApplication.class.getResource("spielfeld.fxml");
 
         fxmlLoader.setLocation(u);
         Scene scene = new Scene(fxmlLoader.load());
