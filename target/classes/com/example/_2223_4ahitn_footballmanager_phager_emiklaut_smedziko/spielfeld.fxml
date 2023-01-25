@@ -16,7 +16,7 @@
          </children>
       </StackPane>
       <Button layoutX="21.0" layoutY="173.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="180.0" text="Abseitsfalle" />
-      <Button layoutX="21.0" layoutY="204.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="180.0" text="Team Pressing" />
+      <Button fx:id="toggle_cover" layoutX="21.0" layoutY="204.0" mnemonicParsing="false" onAction="#toggle_cover_click" prefHeight="25.0" prefWidth="180.0" text="Gegner Deckung" />
       <ListView layoutX="21.0" layoutY="243.0" prefHeight="360.0" prefWidth="180.0" />
       <Button layoutX="65.0" layoutY="118.0" mnemonicParsing="false" text="Taktik Switch" />
       <Label layoutX="94.0" layoutY="95.0" text="Label" />

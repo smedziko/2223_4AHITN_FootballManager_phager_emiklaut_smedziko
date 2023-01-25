@@ -29,7 +29,7 @@ public class Aufstellung {
         if(Objects.equals(spieler.rolle, "TW")){
             posX = torwartX;
             posY = torwartY;
-            System.out.println(spieler.spielfeld.getPrefWidth());
+
         }else {
 
             //In Datenbank packen, Jede Position fixe X / Y Werte nur mehr herausholen

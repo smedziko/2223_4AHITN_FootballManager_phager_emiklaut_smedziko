@@ -1,5 +1,6 @@
 package com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko;
 
+import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Model.Ball;
 import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Model.Spieler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,6 +17,7 @@ import javafx.scene.shape.Rectangle;
 
 public class SpielfeldController {
 
+    boolean cover = false;
 
     @FXML
     private ImageView field_image;
@@ -30,6 +32,11 @@ public class SpielfeldController {
     private Button start_play;
 
 
+    @FXML
+    private Button toggle_cover;
+
+
+
     public void initialize(){
         Image img = new Image(String.valueOf(SpielfeldController.class.getResource("field1.png")));
         Image spieler = new Image(String.valueOf(SpielfeldController.class.getResource("QAT_akramafif.png")));
@@ -38,27 +45,26 @@ public class SpielfeldController {
         field_image.setPreserveRatio(false);
 
         //Mannschaft Klasse, durch Schleife werden beide in dieser Klasse initialisiert
-        Spieler s = new Spieler(playable_field, "LV", false);
-        Spieler s2 = new Spieler(playable_field, "LV", true);
+        Spieler s = new Spieler(playable_field, "LV", false,2312);
+        Spieler s2 = new Spieler(playable_field, "LV", true,234);
 
-        Spieler s10 = new Spieler(playable_field, "RV", false);
-        Spieler s20 = new Spieler(playable_field, "RV", true);
+        Spieler s10 = new Spieler(playable_field, "RV", false,32423);
+        Spieler s20 = new Spieler(playable_field, "RV", true,342);
 
-        Spieler s4 = new Spieler(playable_field, "LM", false);
-        Spieler s5 = new Spieler(playable_field, "LM", true);
+        Spieler s4 = new Spieler(playable_field, "LM", false,32423);
+        Spieler s5 = new Spieler(playable_field, "LM", true,11);
 
-        Spieler sd = new Spieler(playable_field, "ZM", false);
-        Spieler sd2 = new Spieler(playable_field, "ZM", true);
+        Spieler sd = new Spieler(playable_field, "ZM", false,10);
+        Spieler sd2 = new Spieler(playable_field, "ZM", true,2);
 
-        Spieler sd234 = new Spieler(playable_field, "RM", false);
-        Spieler sd22 = new Spieler(playable_field, "RM", true);
+        Spieler sd234 = new Spieler(playable_field, "RM", false,21);
+        Spieler sd22 = new Spieler(playable_field, "RM", true,23);
 
-        Spieler torwart = new Spieler(playable_field, "TW", false);
-        Spieler torwart2 = new Spieler(playable_field, "TW", true);
+        Spieler torwart = new Spieler(playable_field, "TW", false,2);
+        Spieler torwart2 = new Spieler(playable_field, "TW", true,1);
 
-        Spieler torwart4 = new Spieler(playable_field, "ST", false);
-        Spieler torwart24 = new Spieler(playable_field, "ST", true);
-
+        Spieler torwart4 = new Spieler(playable_field, "ST", false,12);
+        Spieler torwart24 = new Spieler(playable_field, "ST", true,234);
 
 
 
@@ -67,5 +73,33 @@ public class SpielfeldController {
     @FXML
     void play_click(ActionEvent event) {
         start_play.setVisible(false);
+
+        Circle ball = new Circle();
+        ball.setRadius(14);
+        Image img = new Image(String.valueOf(SpielfeldController.class.getResource("QAT_akramafif.png")));
+        ball.setFill(new ImagePattern(img));
+        ball.setLayoutX(417);
+        ball.setLayoutY(298);
+        playable_field.getChildren().add(ball);
+        Ball.setBall(ball);
+
+        for (Spieler s : Spieler.getTeam()) {
+            s.setBall(ball);
+            s.getMove().start();
+        }
+
+        for(Spieler s : Spieler.getEnemyteam()){
+            s.setBall(ball);
+            s.getMove().start();
+        }
+
+    }
+    @FXML
+    void toggle_cover_click(ActionEvent event) {
+        cover = !cover;
+
+        for (Spieler s : Spieler.getTeam()) {
+            s.setCover(cover);
+        }
     }
 }
