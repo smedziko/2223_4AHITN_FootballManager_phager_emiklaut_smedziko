@@ -3,12 +3,15 @@ package com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Model;
 import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Controller.SpielfeldController;
 import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.HelloApplication;
 import javafx.animation.AnimationTimer;
+import javafx.beans.binding.Bindings;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Random;
 
 public class Spieler {
     AnchorPane spielfeld;
@@ -17,7 +20,7 @@ public class Spieler {
     String rolle;
 
 
-    Circle ball;
+    Ball ball;
 
     boolean isEnemy;
 
@@ -34,10 +37,12 @@ public class Spieler {
 
     double startX;
     double startY;
-    boolean enemyTeamball;
-    boolean teamball;
 
-    Spieler playeronball;
+    static boolean startofgame;
+    static boolean enemyTeamball;
+    static boolean teamball;
+
+    static Spieler playeronball;
 
     int zweikampf;
 
@@ -45,6 +50,10 @@ public class Spieler {
     double overY;
     double overX;
     double underY;
+
+    int start = 0;
+
+    static boolean teamanstoss;
 
     AnimationTimer move = new AnimationTimer() {
         private long lastUpdate = 0;
@@ -55,13 +64,18 @@ public class Spieler {
             if (l - lastUpdate >= 12_000_000) {
 
                 try {
-                    checkballdetection();
+                    if(!hasBall) {
+                        if((teamball && isEnemy || enemyTeamball && !isEnemy) || (!teamball && !enemyTeamball)) {
+                            checkballdetection();
+                        }else {
+                            findopening();
+                        }
 
-                    if(!balldetected) {
-                        checkenemydetection();
-                    }
-                    if(onlymove) {
-                        checkdirection();
+                        if (onlymove) {
+                            checkdirection();
+                        }
+                    }else {
+                        runtogoal();
                     }
 
                     onlymove = true;
@@ -80,10 +94,13 @@ public class Spieler {
         }
     };
 
+    private void findopening() {
+    }
+
     private void checkdirection() {
-        if(ball.getLayoutX() > 400 && body.getLayoutX() < overX && body.getLayoutX() > 836){
+        if(Ball.playball.getLayoutX() > 417 && body.getLayoutX() < underX && body.getLayoutX() > 836){
             body.setLayoutX(body.getLayoutX() - speed);
-        }else if(body.getLayoutX() < underX){
+        }else if(body.getLayoutX() > overX && Ball.playball.getLayoutX() < 417){
             body.setLayoutX(body.getLayoutX() - speed);
         }
     }
@@ -107,6 +124,7 @@ public class Spieler {
             }
 
             if (enemydetected) {
+                //Muss genaun sein um nicht mehr zu wirken
                 if (s.body.getLayoutY() > body.getLayoutY()) {
                     body.setLayoutY(body.getLayoutY() + speed);
                 } else if (s.body.getLayoutY() < body.getLayoutY()) {
@@ -129,58 +147,130 @@ public class Spieler {
 
     public void checkballdetection() throws InterruptedException {
 
-        if (ball.getLayoutY() >= overY && ball.getLayoutX() >= underX && ball.getLayoutX() <= overX) {
+
+        if (Ball.playball.getLayoutY() >= overY && Ball.playball.getLayoutX() >= underX && Ball.playball.getLayoutX() <= overX) {
             balldetected = true;
             onlymove = false;
-        } else if (ball.getLayoutY() <= underY && ball.getLayoutY() >= body.getLayoutY() && ball.getLayoutX() >= underX && ball.getLayoutX() <= overX) {
+        } else if (Ball.playball.getLayoutY() <= underY && Ball.playball.getLayoutX() >= underX && Ball.playball.getLayoutX() <= overX) {
             balldetected = true;
             onlymove = false;
         }
 
         if(balldetected){
-            if(ball.getLayoutY() > body.getLayoutY()){
+            if(Ball.playball.getLayoutY() > body.getLayoutY()){
                 body.setLayoutY(body.getLayoutY() + speed);
-            }else if(ball.getLayoutY() < body.getLayoutY()){
+            }else if(Ball.playball.getLayoutY() < body.getLayoutY()){
                 body.setLayoutY(body.getLayoutY() - speed);
             }
 
-            if(ball.getLayoutX() > body.getLayoutX()){
+            if(Ball.playball.getLayoutX() > body.getLayoutX()){
                 body.setLayoutX(body.getLayoutX() + speed);
-            }else if(ball.getLayoutX() < body.getLayoutX()){
+            }else if(Ball.playball.getLayoutX() < body.getLayoutX()){
                 body.setLayoutX(body.getLayoutX() - speed);
             }
         }
 
-        if(ball.getLayoutX() > body.getLayoutX() - 10 && ball.getLayoutX() < body.getLayoutX() + 10) {
+        if(Ball.playball.getLayoutX() > body.getLayoutX() - 10 && Ball.playball.getLayoutX() < body.getLayoutX() + 10 && Ball.playball.getLayoutY() > body.getLayoutY()-10 && Ball.playball.getLayoutY() < body.getLayoutY()+10) {
 
             if (!teamball && !enemyTeamball) {
                 hasBall = true;
                 playeronball = this;
 
+                Ball.stopped = true;
+                Ball.playball.setLayoutY(body.getLayoutY());
+
+                if(isEnemy) {
+                    Ball.playball.setLayoutX(body.getLayoutX() + 1);
+                }else {
+                    Ball.playball.setLayoutX(body.getLayoutX() - 1);
+                }
+
                 if (isEnemy) {
                     enemyTeamball = true;
-                    System.out.println("Enemy Team Ball");
-                    //fight();
                 } else {
                     teamball = true;
-                    System.out.println("Team ball");
                 }
             }else {
-                //fight();
+                Ball.stopped = true;
+                fight();
             }
         }
 
 
     }
 
-    public void fight() throws InterruptedException {
+    private void runtogoal() {
 
-        if(playeronball.zweikampf >= zweikampf){
-
-            playeronball.move.wait(100);
-        }else if(zweikampf >= playeronball.zweikampf){
-            move.wait(100);
+        boolean enemyontop = false;
+        boolean enemyonbottom = false;
+        ArrayList<Spieler> teamlist;
+        if(isEnemy) {
+            teamlist = team;
         }else {
+            teamlist = enemyteam;
+        }
+        if(body.getLayoutY() < Aufstellung.untenY && body.getLayoutY() > Aufstellung.obenY) {
+            for (Spieler s : teamlist) {
+                if (s.body.getLayoutY() > body.getLayoutY() - 50 && s.body.getLayoutY() < body.getLayoutY() && !enemyontop && !enemyonbottom) {
+                    enemyonbottom = true;
+                } else if (s.body.getLayoutY() < body.getLayoutY() && s.body.getLayoutY() > body.getLayoutY() + 50 && !enemyontop && !enemyonbottom) {
+                    enemyontop = true;
+                }
+
+            }
+        }
+
+            if (enemyonbottom) {
+                body.setLayoutY(body.getLayoutY() + speed);
+                Ball.playball.setLayoutY(Ball.playball.getLayoutY() + speed);
+            } else if (enemyontop) {
+                body.setLayoutY(body.getLayoutY() - speed);
+                Ball.playball.setLayoutY(Ball.playball.getLayoutY() - speed);
+            }
+
+        if(!isEnemy && body.getLayoutX() >= 670 || isEnemy && body.getLayoutX() <= 200){
+            Ball.stopped = false;
+            Ball.shoot();
+            playeronball = null;
+            enemyTeamball = false;
+            teamball = false;
+            hasBall = false;
+            move.stop();
+            body.setVisible(false);
+        }else if(!isEnemy){
+            body.setLayoutX(body.getLayoutX() + speed);
+            Ball.playball.setLayoutX(Ball.playball.getLayoutX() + speed);
+        }else {
+            body.setLayoutX(body.getLayoutX() - speed);
+            Ball.playball.setLayoutX(Ball.playball.getLayoutX() - speed);
+        }
+
+
+        }
+
+
+    public void fight() {
+        if(playeronball != this) {
+            if (playeronball.zweikampf > zweikampf) {
+                body.setVisible(false);
+                move.stop();
+            }else {
+                hasBall = true;
+                playeronball.hasBall = false;
+                playeronball.body.setVisible(false);
+                playeronball.move.stop();
+
+                playeronball = this;
+
+                if (isEnemy) {
+                    enemyTeamball = true;
+                    teamball = false;
+                } else {
+                    teamball = true;
+                    enemyTeamball = false;
+                }
+
+            }
         }
 
     }
@@ -194,6 +284,9 @@ public class Spieler {
     public Spieler(AnchorPane spielfeld, String position, boolean enemy, int zweikampf){
         this.zweikampf = zweikampf;
         rolle = position;
+        startofgame = true;
+
+        Random r = new Random();
 
         isEnemy = enemy;
         //Enemy team das die Spieler wissen wo gegner stehen für deckung andere techniken
@@ -216,16 +309,27 @@ public class Spieler {
         startX = body.getLayoutX();
         startY = body.getLayoutX();
 
-        underY = startY - 107;
-        overY = startY + 107;
-        overX = startX + 107;
-        underX = startX - 107;
-
+        if(!Objects.equals(position, "TW")) {
+            underY = startY + 80;
+            overY = startY - 80;
+            overX = startX + 80;
+            underX = startX - 80;
+        }else {
+            underY = startY -10;
+            overX = startX + 10;
+            underX = startX - 10;
+            overY = startY + 10;
+        }
     }
 
 
     public static ArrayList<Spieler> getTeam(){
         return team;
+    }
+
+    public static void setAnstoss(boolean teamanstoss){
+        Spieler.teamanstoss = teamanstoss;
+        Spieler.startofgame = true;
     }
 
     public static ArrayList<Spieler> getEnemyteam(){
@@ -241,7 +345,7 @@ public class Spieler {
     }
 
     public void setBall(Circle ball){
-        this.ball = ball;
+        Ball.setBall(ball);
     }
 
 

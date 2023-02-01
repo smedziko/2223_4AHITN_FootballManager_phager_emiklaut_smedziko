@@ -13,6 +13,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
+import java.util.Random;
+
 public class SpielfeldController {
 
     boolean cover = false;
@@ -42,6 +44,11 @@ public class SpielfeldController {
         field_image.setImage(img);
         field_image.setPreserveRatio(false);
 
+        Random r = new Random();
+        int random = r.nextInt(2);
+
+        Spieler.setAnstoss(random == 0);
+
         //Mannschaft Klasse, durch Schleife werden beide in dieser Klasse initialisiert
         Spieler s = new Spieler(playable_field, "LV", false,2312);
         Spieler s2 = new Spieler(playable_field, "LV", true,234);
@@ -61,7 +68,7 @@ public class SpielfeldController {
         Spieler torwart = new Spieler(playable_field, "TW", false,2);
         Spieler torwart2 = new Spieler(playable_field, "TW", true,1);
 
-        Spieler torwart4 = new Spieler(playable_field, "ST", false,12);
+        Spieler torwart4 = new Spieler(playable_field, "ST", false,2);
         Spieler torwart24 = new Spieler(playable_field, "ST", true,234);
 
 
@@ -74,7 +81,7 @@ public class SpielfeldController {
 
         Circle ball = new Circle();
         ball.setRadius(14);
-        Image img = new Image(String.valueOf(SpielfeldController.class.getResource("QAT_akramafif.png")));
+        Image img = new Image(String.valueOf(HelloApplication.class.getResource("QAT_akramafif.png")));
         ball.setFill(new ImagePattern(img));
         ball.setLayoutX(417);
         ball.setLayoutY(298);
