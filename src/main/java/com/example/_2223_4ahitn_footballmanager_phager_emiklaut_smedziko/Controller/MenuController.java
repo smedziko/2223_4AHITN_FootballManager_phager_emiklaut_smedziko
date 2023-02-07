@@ -1,6 +1,7 @@
 package com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Controller;
 
 import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Model.ChangeScene;
+import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Model.Spieler;
 import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Players;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -36,6 +37,7 @@ public class MenuController {
             @Override
             public void handle(ActionEvent actionEvent) {
 
+                Spieler.country = selectedLand;
                 try {
                     ChangeScene.change_scene("spielfeld", start_game);
                 } catch (IOException e) {

@@ -6,6 +6,7 @@ import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Model.S
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -18,6 +19,9 @@ import java.util.Random;
 public class SpielfeldController {
 
     boolean cover = false;
+
+    @FXML
+    private Label score;
 
     @FXML
     private ImageView field_image;
@@ -86,16 +90,20 @@ public class SpielfeldController {
         ball.setLayoutX(417);
         ball.setLayoutY(298);
         playable_field.getChildren().add(ball);
-        Ball.setBall(ball);
+        Ball.setBall(ball, score);
 
         for (Spieler s : Spieler.getTeam()) {
             s.setBall(ball);
-            s.getMove().start();
+            if(!s.getIsTW()) {
+                s.getMove().start();
+            }
         }
 
         for(Spieler s : Spieler.getEnemyteam()){
             s.setBall(ball);
-            s.getMove().start();
+            if(!s.getIsTW()) {
+                s.getMove().start();
+            }
         }
 
     }

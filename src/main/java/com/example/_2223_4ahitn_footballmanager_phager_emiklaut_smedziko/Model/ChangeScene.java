@@ -20,7 +20,7 @@ public class ChangeScene {
         stageclose.close();
         final FXMLLoader fxmlLoader = new FXMLLoader();
         System.out.println(MenuController.class.getResource(game+".fxml"));
-        URL u = HelloApplication.class.getResource("spielfeld.fxml");
+        URL u = HelloApplication.class.getResource(game + ".fxml");
 
         fxmlLoader.setLocation(u);
         Scene scene = new Scene(fxmlLoader.load());

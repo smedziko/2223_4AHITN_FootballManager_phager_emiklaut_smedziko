@@ -1,14 +1,21 @@
 package com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Model;
 
 import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Controller.SpielfeldController;
+import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Database;
 import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.HelloApplication;
+import com.example._2223_4ahitn_footballmanager_phager_emiklaut_smedziko.Players;
 import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.util.Duration;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
@@ -18,9 +25,6 @@ public class Spieler {
     Circle body = new Circle();
     double speed = 0.5;
     String rolle;
-
-
-    Ball ball;
 
     boolean isEnemy;
 
@@ -51,9 +55,15 @@ public class Spieler {
     double overX;
     double underY;
 
+    public static String country = "";
+
     int start = 0;
 
+    boolean isTW = false;
+
     static boolean teamanstoss;
+
+    int random = 0;
 
     AnimationTimer move = new AnimationTimer() {
         private long lastUpdate = 0;
@@ -64,21 +74,23 @@ public class Spieler {
             if (l - lastUpdate >= 12_000_000) {
 
                 try {
+
+                    //Fehlend
+                    // Tor, Getroffen oder nicht chance, wenn nicht abblocken in random richtung
+                    // Frei stellen, wenn eigener Spieler Ball
+                    // Datenbank verschiedene Spieler
                     if(!hasBall) {
                         if((teamball && isEnemy || enemyTeamball && !isEnemy) || (!teamball && !enemyTeamball)) {
                             checkballdetection();
-                        }else {
-                            findopening();
-                        }
-
-                        if (onlymove) {
-                            checkdirection();
                         }
                     }else {
                         runtogoal();
                     }
-
                     onlymove = true;
+
+                    
+
+
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -94,53 +106,6 @@ public class Spieler {
         }
     };
 
-    private void findopening() {
-    }
-
-    private void checkdirection() {
-        if(Ball.playball.getLayoutX() > 417 && body.getLayoutX() < underX && body.getLayoutX() > 836){
-            body.setLayoutX(body.getLayoutX() - speed);
-        }else if(body.getLayoutX() > overX && Ball.playball.getLayoutX() < 417){
-            body.setLayoutX(body.getLayoutX() - speed);
-        }
-    }
-
-    private void checkenemydetection() {
-
-        ArrayList<Spieler> teamlist;
-        if(isEnemy){
-            teamlist = team;
-        }else {
-            teamlist = enemyteam;
-        }
-
-        for(Spieler s : teamlist) {
-            if (s.body.getLayoutY() >= overY && s.body.getLayoutX() >= underX && s.body.getLayoutX() <= overX) {
-                enemydetected = true;
-                onlymove = false;
-            } else if (s.body.getLayoutY() <= underY && s.body.getLayoutY() >= body.getLayoutY() && s.body.getLayoutX() >= underX && s.body.getLayoutX() <= overX) {
-                enemydetected = true;
-                onlymove = false;
-            }
-
-            if (enemydetected) {
-                //Muss genaun sein um nicht mehr zu wirken
-                if (s.body.getLayoutY() > body.getLayoutY()) {
-                    body.setLayoutY(body.getLayoutY() + speed);
-                } else if (s.body.getLayoutY() < body.getLayoutY()) {
-                    body.setLayoutY(body.getLayoutY() - speed);
-                }
-
-                if (s.body.getLayoutX() > body.getLayoutX()) {
-                    body.setLayoutX(body.getLayoutX() + speed);
-                } else if (s.body.getLayoutX() < body.getLayoutX()) {
-                    body.setLayoutX(body.getLayoutX() - speed);
-                }
-            }
-
-        }
-
-    }
 
 
     // && ball.getLayoutY() < body.getLayoutY() + 2 && ball.getLayoutY() > body.getLayoutY() - 2
@@ -235,8 +200,7 @@ public class Spieler {
             enemyTeamball = false;
             teamball = false;
             hasBall = false;
-            move.stop();
-            body.setVisible(false);
+            pauseTimerForDuration(move, Duration.millis(2000));
         }else if(!isEnemy){
             body.setLayoutX(body.getLayoutX() + speed);
             Ball.playball.setLayoutX(Ball.playball.getLayoutX() + speed);
@@ -252,13 +216,11 @@ public class Spieler {
     public void fight() {
         if(playeronball != this) {
             if (playeronball.zweikampf > zweikampf) {
-                body.setVisible(false);
-                move.stop();
+                pauseTimerForDuration(move,Duration.millis(2200));
             }else {
                 hasBall = true;
                 playeronball.hasBall = false;
-                playeronball.body.setVisible(false);
-                playeronball.move.stop();
+                pauseTimerForDuration(playeronball.getMove(),Duration.millis(2200));
 
                 playeronball = this;
 
@@ -286,7 +248,6 @@ public class Spieler {
         rolle = position;
         startofgame = true;
 
-        Random r = new Random();
 
         isEnemy = enemy;
         //Enemy team das die Spieler wissen wo gegner stehen für deckung andere techniken
@@ -294,6 +255,7 @@ public class Spieler {
             enemyteam.add(this);
         }else {
             team.add(this);
+
         }
 
         this.spielfeld = spielfeld;
@@ -309,6 +271,7 @@ public class Spieler {
         startX = body.getLayoutX();
         startY = body.getLayoutX();
 
+
         if(!Objects.equals(position, "TW")) {
             underY = startY + 80;
             overY = startY - 80;
@@ -319,6 +282,7 @@ public class Spieler {
             overX = startX + 10;
             underX = startX - 10;
             overY = startY + 10;
+            isTW = true;
         }
     }
 
@@ -347,6 +311,16 @@ public class Spieler {
     public void setBall(Circle ball){
         Ball.setBall(ball);
     }
+
+    public boolean getIsTW(){
+        return isTW;
+    }
+
+    void pauseTimerForDuration(AnimationTimer timer, Duration duration) {
+        PauseTransition pt = new PauseTransition(duration);
+        pt.setOnFinished(event -> timer.start());
+        timer.stop();
+        pt.play();}
 
 
 
