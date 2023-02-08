@@ -38,7 +38,7 @@ public class Ball {
                         playball.setLayoutY(playball.getLayoutY() - 1);
                     }
 
-                    if(playball.getLayoutY() > 280) {
+                    if(playball.getLayoutX() > 280) {
                         playball.setLayoutX(playball.getLayoutX() + 0.5);
                     }else {
                         playball.setLayoutX(playball.getLayoutX() - 0.5);
@@ -50,7 +50,7 @@ public class Ball {
                         playball.setLayoutX(417);
                         Ball.stopped = true;
                     }
-                    if(playball.getLayoutX() < 100){
+                    if(playball.getLayoutX() < 70){
                         enemygoals++;
                         score.setText(goals + " : " + enemygoals);
                         playball.setLayoutX(417);

@@ -55,22 +55,22 @@ public class SpielfeldController {
 
         //Mannschaft Klasse, durch Schleife werden beide in dieser Klasse initialisiert
         Spieler s = new Spieler(playable_field, "LV", false,2312);
-        Spieler s2 = new Spieler(playable_field, "LV", true,234);
+        Spieler s2 = new Spieler(playable_field, "LV", true,2343);
 
         Spieler s10 = new Spieler(playable_field, "RV", false,32423);
-        Spieler s20 = new Spieler(playable_field, "RV", true,342);
+        Spieler s20 = new Spieler(playable_field, "RV", true,32422);
 
-        Spieler s4 = new Spieler(playable_field, "LM", false,32423);
-        Spieler s5 = new Spieler(playable_field, "LM", true,11);
+        Spieler s4 = new Spieler(playable_field, "LM", false,32422);
+        Spieler s5 = new Spieler(playable_field, "LM", true,11324);
 
         Spieler sd = new Spieler(playable_field, "ZM", false,10);
-        Spieler sd2 = new Spieler(playable_field, "ZM", true,2);
+        Spieler sd2 = new Spieler(playable_field, "ZM", true,2324);
 
-        Spieler sd234 = new Spieler(playable_field, "RM", false,21);
+        Spieler sd234 = new Spieler(playable_field, "RM", false,24);
         Spieler sd22 = new Spieler(playable_field, "RM", true,23);
 
-        Spieler torwart = new Spieler(playable_field, "TW", false,2);
-        Spieler torwart2 = new Spieler(playable_field, "TW", true,1);
+        Spieler torwart = new Spieler(playable_field, "TW", false,234324324);
+        Spieler torwart2 = new Spieler(playable_field, "TW", true,123432432);
 
         Spieler torwart4 = new Spieler(playable_field, "ST", false,2);
         Spieler torwart24 = new Spieler(playable_field, "ST", true,234);
